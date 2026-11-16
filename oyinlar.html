@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071a36">
+  <title>Interaktiv o‘yinlar | Fizika Xiva</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #f4f8ff;
+      background: linear-gradient(145deg, #06152d, #0b2d55 58%, #071a36);
+      min-height: 100vh;
+    }
+    header {
+      padding: 28px 18px 18px;
+      text-align: center;
+    }
+    .brand { color: #65d5ff; font-weight: 800; letter-spacing: 1.5px; font-size: 15px; }
+    h1 { margin: 12px 0 8px; font-size: clamp(30px, 5vw, 48px); }
+    .intro { color: #c4d7ef; font-size: 18px; max-width: 720px; margin: 0 auto; line-height: 1.5; }
+    main { width: min(1000px, 92%); margin: 24px auto 50px; }
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+    }
+    .game {
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(173,216,255,.25);
+      border-radius: 22px;
+      padding: 26px;
+      box-shadow: 0 14px 35px rgba(0,0,0,.18);
+    }
+    .symbol { font-size: 48px; }
+    .game h2 { margin: 12px 0 10px; font-size: 25px; }
+    .game p { color: #d0def0; line-height: 1.6; min-height: 54px; font-size: 17px; }
+    a.play {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 16px 22px;
+      min-height: 54px;
+      border-radius: 14px;
+      background: #19b6e6;
+      color: #04182b;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 800;
+      text-align: center;
+    }
+    a.play:focus, a.play:hover { background: #75e0ff; outline: 3px solid #fff; }
+    .home {
+      display: inline-block;
+      margin: 28px 0 0;
+      color: #bdeaff;
+      font-size: 17px;
+      text-decoration: none;
+      padding: 12px 0;
+    }
+    footer { text-align: center; color: #9db6d2; padding: 18px; font-size: 14px; }
+    @media (max-width: 600px) {
+      header { padding-top: 22px; }
+      .game { padding: 22px; }
+      a.play { display: block; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">FIZIKA XIVA</div>
+    <h1>Interaktiv o‘yinlar</h1>
+    <p class="intro">Fizika bilimlaringizni sinab ko‘ring, bellashing va yangi narsalarni o‘yin orqali o‘rganing!</p>
+  </header>
+
+  <main>
+    <section class="games" aria-label="Fizika o‘yinlari">
+      <article class="game">
+        <div class="symbol" aria-hidden="true">🏆</div>
+        <h2>Bilimlar bellashuvi</h2>
+        <p>Fizikaning turli bo‘limlari bo‘yicha savollarga javob bering va bellashing.</p>
+        <a class="play" href="bilimlar_bellashuvi.html">O‘yinni boshlash ▶</a>
+      </article>
+
+      <article class="game">
+        <div class="symbol" aria-hidden="true">⚖️</div>
+        <h2>Nyuton bellashuvi</h2>
+        <p>Nyuton qonunlari va kuchlar mavzusidagi topshiriqlarni bajaring.</p>
+        <a class="play" href="nyuton_oyini.html">O‘yinni boshlash ▶</a>
+      </article>
+    </section>
+
+    <a class="home" href="index.html">← Bosh sahifaga qaytish</a>
+  </main>
+
+  <footer>© Fizika Xiva · Muallif: Madaminov Dilshodbek</footer>
+</body>
+</html>
