@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071426">
+<title>Fizika Xiva — Bilimlar bellashuvi</title>
+<style>
+:root{--bg:#071426;--panel:#102744;--panel2:#163657;--blue:#24b8f2;--cyan:#66ddff;--gold:#ffd166;--green:#38d996;--red:#ff667a;--text:#f4f8ff;--muted:#b7c9dc}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 0,#163d63 0,#071426 55%);color:var(--text);font-family:Arial,sans-serif;min-height:100vh}
+button,input{font:inherit}
+header{text-align:center;padding:18px 12px 8px}
+.brand{font-size:clamp(24px,4vw,38px);font-weight:900;letter-spacing:1px;color:var(--cyan)}
+.subtitle{color:var(--muted);margin:7px 0 0;font-size:clamp(13px,2vw,17px)}
+main{width:min(1100px,96%);margin:12px auto 35px}
+.panel{background:linear-gradient(145deg,rgba(22,54,87,.97),rgba(12,33,57,.97));border:1px solid #28547b;border-radius:22px;padding:clamp(16px,3vw,28px);box-shadow:0 16px 40px #0005}
+h1,h2,h3{margin-top:0}
+h2{font-size:clamp(22px,3vw,30px);text-align:center}
+.intro{text-align:center;color:var(--muted);line-height:1.6}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
+label{display:block;font-weight:700;color:var(--cyan);margin-bottom:7px}
+input{width:100%;padding:15px;border-radius:12px;border:2px solid #38658c;background:#071a30;color:white;font-size:18px;outline:none}
+input:focus{border-color:var(--cyan)}
+.primary,.secondary,.answer,.next{border:0;border-radius:14px;padding:16px 20px;font-weight:800;cursor:pointer;touch-action:manipulation;transition:.15s}
+.primary{background:linear-gradient(90deg,#078dcc,#21c4ed);color:#031a2a;font-size:20px;display:block;width:100%;box-shadow:0 7px 0 #07547b}
+.primary:active,.answer:active,.secondary:active,.next:active{transform:translateY(2px)}
+.secondary{background:#244967;color:white}
+.hidden{display:none!important}
+.scoreboard{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch;margin-bottom:18px}
+.player{background:#0a1d33;border:2px solid #2a5b82;border-radius:16px;padding:14px;text-align:center}
+.player.active{border-color:var(--gold);box-shadow:0 0 0 3px #ffd16625}
+.player .name{font-weight:800;font-size:clamp(15px,2.5vw,21px);overflow-wrap:anywhere}
+.player .score{font-size:clamp(28px,5vw,42px);font-weight:900;color:var(--gold);margin-top:5px}
+.vs{align-self:center;color:var(--gold);font-weight:900;font-size:22px}
+.topline{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-weight:700;margin:12px 2px}
+.progress{height:10px;background:#07182a;border-radius:20px;overflow:hidden;margin:8px 0 20px}
+.bar{height:100%;width:0;background:linear-gradient(90deg,#16a6e0,#6ce5ff);transition:width .3s}
+.question{font-size:clamp(21px,3.4vw,32px);line-height:1.35;text-align:center;font-weight:800;margin:20px 0 24px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.answer{min-height:78px;background:#183d60;border:2px solid #37688f;color:white;text-align:left;font-size:clamp(17px,2.5vw,22px);line-height:1.3}
+.answer .letter{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#0a2944;color:var(--cyan);margin-right:10px;font-weight:900}
+.answer:disabled{cursor:default;opacity:1}
+.answer.correct{background:#07583f;border-color:var(--green)}
+.answer.wrong{background:#642b3b;border-color:var(--red)}
+.feedback{margin-top:18px;padding:16px;border-radius:14px;background:#0a1d33;border:1px solid #315b7e;line-height:1.5;font-size:17px}
+.feedback.good{border-color:var(--green)}
+.feedback.bad{border-color:var(--red)}
+.next{background:var(--gold);color:#302000;font-size:19px;width:100%;margin-top:14px}
+.result{text-align:center}
+.trophy{font-size:70px;margin:4px}
+.winner{font-size:clamp(25px,4vw,38px);color:var(--gold);font-weight:900;margin:10px 0}
+.final-scores{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+.final-card{background:#0a1d33;padding:18px;border-radius:14px}
+.final-card strong{display:block;font-size:30px;color:var(--gold);margin-top:8px}
+.small{color:var(--muted);font-size:13px;text-align:center;margin-top:20px}
+@media(max-width:600px){.fields,.answers{grid-template-columns:1fr}.scoreboard{grid-template-columns:1fr auto 1fr}.player{padding:10px 5px}.answer{min-height:68px}.panel{padding:15px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">⚛ FIZIKA XIVA</div>
+  <p class="subtitle">BILIMLAR BELLASHUVI · Bilimingizni sinang, g‘olib bo‘ling!</p>
+</header>
+<main>
+<section id="setup" class="panel">
+  <h2>🏆 Bellashuvga xush kelibsiz!</h2>
+  <p class="intro">Ikki ishtirokchi nomini kiriting. Dastur savollar bazasidan tasodifiy 10 ta savol tanlaydi. Har bir to‘g‘ri javob 10 ball!</p>
+  <div class="fields">
+    <div><label for="p1">🔵 1-o‘yinchi</label><input id="p1" maxlength="24" value="1-o‘yinchi" placeholder="Ismini kiriting"></div>
+    <div><label for="p2">🟣 2-o‘yinchi</label><input id="p2" maxlength="24" value="2-o‘yinchi" placeholder="Ismini kiriting"></div>
+  </div>
+  <button class="primary" id="start">BELLASHUVNI BOSHLASH ▶</button>
+  <p class="small">Savollar: mexanika, issiqlik, elektr, magnit, optika va tovush</p>
+</section>
+
+<section id="game" class="hidden">
+  <div class="scoreboard">
+    <div class="player" id="player0"><div class="name" id="name0"></div><div class="score" id="score0">0</div><div>ball</div></div>
+    <div class="vs">VS</div>
+    <div class="player" id="player1"><div class="name" id="name1"></div><div class="score" id="score1">0</div><div>ball</div></div>
+  </div>
+  <div class="panel">
+    <div class="topline"><span id="round">1 / 10-savol</span><span id="turn">Navbat: 1-o‘yinchi</span></div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <div id="feedback" class="feedback hidden" aria-live="polite"></div>
+    <button id="next" class="next hidden">Keyingi savol ➜</button>
+  </div>
+</section>
+
+<section id="results" class="panel result hidden">
+  <div class="trophy">🏆</div>
+  <h2>Bellashuv yakunlandi!</h2>
+  <div class="winner" id="winner"></div>
+  <div class="final-scores" id="finalScores"></div>
+  <p class="intro" id="summary"></p>
+  <button class="primary" id="again">YANGI BELLASHUV 🔄</button>
+</section>
+</main>
+<script>
+const bank = [
+{q:"Jismning tezligini topish formulasi qaysi?",a:["v = s / t","s = v · t","t = s · v","v = m · a"],c:0,e:"Tezlik bosib o‘tilgan yo‘lning vaqtga nisbatiga teng: v = s / t."},
+{q:"Kuchning SI sistemasidagi birligi nima?",a:["Joul","Nyuton","Vatt","Paskal"],c:1,e:"Kuchning SI birligi — nyuton (N)."},
+{q:"Yer sirtida erkin tushish tezlanishi taxminan qancha?",a:["1,6 m/s²","3,0 m/s²","9,8 m/s²","98 m/s²"],c:2,e:"Yer sirtiga yaqin joyda g ≈ 9,8 m/s²."},
+{q:"Jismga ta’sir etuvchi kuch nolga teng bo‘lsa, jism qanday harakat qilishi mumkin?",a:["Faqat tezlanadi","Tinch turadi yoki tekis to‘g‘ri chiziqli harakat qiladi","Faqat aylanadi","Albatta to‘xtaydi"],c:1,e:"Nyutonning birinchi qonuniga ko‘ra, natijaviy kuch nol bo‘lsa, tezlik o‘zgarmaydi."},
+{q:"Bosim qanday formula bilan aniqlanadi?",a:["p = F / S","p = m · g","p = A / t","p = ρ · V"],c:0,e:"Bosim sirtga tik ta’sir etuvchi kuchning yuzaga nisbatidir: p = F/S."},
+{q:"Zichlikning SI birligi qaysi?",a:["kg","N/m","kg/m³","m³/kg"],c:2,e:"Zichlikning SI birligi kilogramm taqsim kub metr (kg/m³)."},
+{q:"Mexanik ish qachon bajariladi?",a:["Kuch ta’sirida jism siljiganda","Jism tinch turganda","Faqat jism qiziganda","Faqat tovush chiqqanda"],c:0,e:"Kuch ta’sirida jism siljisa, mexanik ish bajarilishi mumkin."},
+{q:"Quvvat nimani ifodalaydi?",a:["Bajarilgan ishning bajarilish tezligini","Jism massasini","Jism hajmini","Kuch yo‘nalishini"],c:0,e:"Quvvat — vaqt birligida bajarilgan ish: P = A/t."},
+{q:"Ishqalanish kuchi odatda qaysi yo‘nalishda bo‘ladi?",a:["Harakatga qarshi","Harakat bilan bir xil","Faqat yuqoriga","Har doim pastga"],c:0,e:"Sirpanish ishqalanish kuchi nisbiy sirpanish yoki sirpanishga intilish yo‘nalishiga qarshi yo‘naladi."},
+{q:"Jismning inersiyasi nimaga bog‘liq?",a:["Rangiga","Massasiga","Haroratigagina","Shakliga"],c:1,e:"Jism massasi qancha katta bo‘lsa, uning inersiyasi shuncha katta bo‘ladi."},
+{q:"Temperatura nimani tavsiflaydi?",a:["Zarralarning tartibli joylashishini","Jismning issiqlik holatini","Jismning massasini","Jismning hajmini"],c:1,e:"Temperatura jismning issiqlik holatini tavsiflaydi."},
+{q:"Issiqlik o‘tkazuvchanlik qaysi muhitda, odatda, eng yaxshi?",a:["Metallarda","Vakuumda","Havoda","Yog‘ochda"],c:0,e:"Metallar issiqlikni yaxshi o‘tkazadi; vakuumda issiqlik o‘tkazuvchanlik bo‘lmaydi."},
+{q:"Suv normal atmosfera bosimida necha °C da qaynaydi?",a:["0 °C","50 °C","100 °C","150 °C"],c:2,e:"Normal atmosfera bosimida suv 100 °C da qaynaydi."},
+{q:"Elektr tokining yo‘nalishi tashqi zanjirda qanday qabul qilingan?",a:["Manfiy qutbdan musbat qutbga","Musbat qutbdan manfiy qutbga","Har doim yuqoriga","Elektronlar yo‘nalishi bilan bir xil"],c:1,e:"An’anaviy tok yo‘nalishi tashqi zanjirda musbat qutbdan manfiy qutbga deb qabul qilinadi."},
+{q:"Tok kuchining SI birligi nima?",a:["Volt","Om","Amper","Kulon"],c:2,e:"Tok kuchining SI birligi — amper (A)."},
+{q:"Elektr kuchlanishining birligi qaysi?",a:["Volt","Vatt","Amper","Tesla"],c:0,e:"Kuchlanish volt (V) bilan o‘lchanadi."},
+{q:"Om qonuniga ko‘ra tok kuchi nimaga teng?",a:["I = U/R","I = U·R","I = R/U","I = U+R"],c:0,e:"Zanjir qismi uchun Om qonuni: I = U/R."},
+{q:"Bir xil ikki qarshilik ketma-ket ulanganda umumiy qarshilik qanday bo‘ladi?",a:["Bittasidan ikki marta kichik","Bittasiga teng","Bittasidan ikki marta katta","Nolga teng"],c:2,e:"Ketma-ket ulashda qarshiliklar qo‘shiladi: R = R₁ + R₂."},
+{q:"Magnit maydonni qaysi zarracha hosil qiladi?",a:["Faqat tinch turgan neytral zarracha","Harakatlanuvchi elektr zaryadi","Faqat yorug‘lik","Faqat tovush"],c:1,e:"Harakatlanuvchi elektr zaryadlari, jumladan elektr toki, magnit maydon hosil qiladi."},
+{q:"Yorug‘likning vakuumdagi tezligi taxminan qancha?",a:["3·10⁶ m/s","3·10⁸ m/s","340 m/s","1500 m/s"],c:1,e:"Yorug‘lik vakuumda taxminan 3·10⁸ m/s tezlik bilan tarqaladi."},
+{q:"Yassi ko‘zguda hosil bo‘ladigan tasvir qanday?",a:["Haqiqiy va teskari","Mavhum, to‘g‘ri va jism bilan teng o‘lchamli","Har doim kattalashgan","Har doim kichraygan"],c:1,e:"Yassi ko‘zgu mavhum, to‘g‘ri va jism bilan teng o‘lchamli tasvir beradi."},
+{q:"Tovush vakuumda tarqaladimi?",a:["Ha, juda tez","Yo‘q, tovush uchun moddiy muhit kerak","Faqat yorug‘lik bilan","Faqat yuqori chastotada"],c:1,e:"Tovush mexanik to‘lqin bo‘lib, tarqalishi uchun moddiy muhit zarur."},
+{q:"Tovushning havodagi tezligi xona haroratida taxminan qancha?",a:["34 m/s","340 m/s","3000 m/s","300 000 km/s"],c:1,e:"Havoda xona haroratida tovush tezligi taxminan 340 m/s."},
+{q:"To‘lqin chastotasining birligi nima?",a:["Gers","Metr","Nyuton","Joul"],c:0,e:"Chastota gers (Hz) bilan o‘lchanadi."},
+{q:"Energiya saqlanish qonuni nimani bildiradi?",a:["Energiya yo‘qolib ketadi","Energiya yo‘qdan paydo bo‘ladi","Energiya bir turdan boshqasiga aylanadi, umumiy miqdori saqlanadi","Energiya faqat issiqlikka aylanadi"],c:2,e:"Yopiq sistemada energiyaning umumiy miqdori saqlanadi."},
+{q:"Arximed kuchi qaysi tomonga yo‘naladi?",a:["Pastga","Yuqoriga","Harakatga qarshi","Gorizontal"],c:1,e:"Suyuqlik yoki gazning ko‘taruvchi Arximed kuchi yuqoriga yo‘naladi."},
+{q:"Jismning og‘irlik kuchi qaysi tomonga yo‘naladi?",a:["Yer markazi tomon","Yuqoriga","Gorizontal","Harakat yo‘nalishida"],c:0,e:"Yer yaqinida og‘irlik kuchi Yer markazi tomon, ya’ni vertikal pastga yo‘naladi."},
+{q:"Prujinaning potensial energiyasi qachon ortadi?",a:["Deformatsiya ortganda","Massa kamayganda","Temperatura nol bo‘lganda","Jism tinch turganda"],c:0,e:"Prujina deformatsiyasi ortishi bilan uning elastik potensial energiyasi ortadi."},
+{q:"Transformator asosan nima uchun ishlatiladi?",a:["O‘zgaruvchan tok kuchlanishini o‘zgartirish","Doimiy tokni tovushga aylantirish","Massani o‘lchash","Haroratni pasaytirish"],c:0,e:"Transformator elektromagnit induksiya yordamida o‘zgaruvchan tok kuchlanishini oshiradi yoki kamaytiradi."},
+{q:"Yorug‘likning sinishi qachon yuz beradi?",a:["Yorug‘lik bir muhitdan boshqasiga o‘tganda yo‘nalishi o‘zgarganda","Faqat ko‘zguga tushganda","Tovush tarqalganda","Jism qiziganda"],c:0,e:"Yorug‘lik turli optik zichlikdagi muhitlar chegarasidan o‘tganda tezligi va ko‘pincha yo‘nalishi o‘zgaradi."}
+];
+let players=[],scores=[0,0],questions=[],index=0,turn=0,locked=false;
+const $=id=>document.getElementById(id);
+function shuffle(arr){let a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function startGame(){
+ players=[$('p1').value.trim()||'1-o‘yinchi',$('p2').value.trim()||'2-o‘yinchi'];
+ scores=[0,0];questions=shuffle(bank).slice(0,10);index=0;turn=0;locked=false;
+ $('setup').classList.add('hidden');$('results').classList.add('hidden');$('game').classList.remove('hidden');
+ $('name0').textContent=players[0];$('name1').textContent=players[1];render();
+}
+function render(){
+ locked=false;
+ $('score0').textContent=scores[0];$('score1').textContent=scores[1];
+ $('player0').classList.toggle('active',turn===0);$('player1').classList.toggle('active',turn===1);
+ $('round').textContent=`${index+1} / 10-savol`;
+ $('turn').textContent=`Navbat: ${players[turn]}`;
+ $('bar').style.width=`${index/10*100}%`;
+ const item=questions[index];$('question').textContent=item.q;
+ $('feedback').className='feedback hidden';$('feedback').textContent='';$('next').classList.add('hidden');
+ const box=$('answers');box.innerHTML='';
+ item.a.forEach((answer,i)=>{
+  const b=document.createElement('button');b.className='answer';
+  const letter=document.createElement('span');letter.className='letter';letter.textContent='ABCD'[i];
+  b.append(letter,document.createTextNode(answer));b.addEventListener('click',()=>choose(i));box.appendChild(b);
+ });
+}
+function choose(choice){
+ if(locked)return;locked=true;
+ const item=questions[index],buttons=[...$('answers').querySelectorAll('button')],correct=choice===item.c;
+ buttons.forEach((b,i)=>{b.disabled=true;if(i===item.c)b.classList.add('correct');if(i===choice&&!correct)b.classList.add('wrong');});
+ if(correct)scores[turn]+=10;
+ $('score0').textContent=scores[0];$('score1').textContent=scores[1];
+ const fb=$('feedback');fb.className='feedback '+(correct?'good':'bad');
+ fb.innerHTML=`<strong>${correct?'✅ To‘g‘ri javob! +10 ball':'❌ Noto‘g‘ri javob.'}</strong><br>To‘g‘ri javob: <b>${'ABCD'[item.c]}) ${item.a[item.c]}</b><br><span>${item.e}</span>`;
+ $('bar').style.width=`${(index+1)/10*100}%`;
+ $('next').classList.remove('hidden');$('next').textContent=index===9?'Natijalarni ko‘rish 🏆':'Keyingi savol ➜';
+}
+function nextQuestion(){
+ if(index===9){showResults();return;}
+ index++;turn=1-turn;render();
+}
+function showResults(){
+ $('game').classList.add('hidden');$('results').classList.remove('hidden');
+ let message;
+ if(scores[0]>scores[1])message=`🎉 G‘olib: ${players[0]}!`;
+ else if(scores[1]>scores[0])message=`🎉 G‘olib: ${players[1]}!`;
+ else message='🤝 Durrang! Ikkala ishtirokchi ham barakalla!';
+ $('winner').textContent=message;
+ $('finalScores').innerHTML='';
+ players.forEach((p,i)=>{const d=document.createElement('div');d.className='final-card';const n=document.createElement('div');n.textContent=p;const s=document.createElement('strong');s.textContent=scores[i]+' ball';d.append(n,s);$('finalScores').appendChild(d);});
+ $('summary').textContent=`10 ta savol yakunlandi. Maksimal natija — 100 ball.`;
+}
+$('start').addEventListener('click',startGame);
+$('next').addEventListener('click',nextQuestion);
+$('again').addEventListener('click',()=>{$('results').classList.add('hidden');$('setup').classList.remove('hidden');});
+</script>
+</body>
+</html>
