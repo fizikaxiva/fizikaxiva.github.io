@@ -1,0 +1,12 @@
+
+{
+  "name": "Fizika Xiva",
+  "short_name": "Fizika Xiva",
+  "description": "Fizikani interaktiv o‘rganish platformasi",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#123b70"
+}
